@@ -1,0 +1,354 @@
+/* ==========================================================================
+   1. CONFIGURAÇÕES GERAIS E CORES (Inspirado na sobriedade da UFSCar)
+   ========================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+:root {
+    --cor-primaria: #003366;      /* Azul escuro institucional */
+    --cor-secundaria: #008080;    /* Teal/Verde água para botões e links */
+    --cor-premium: #ffc107;       /* Dourado para planos de destaque */
+    --cor-9dias: #e67e22;         /* Laranja para anúncios rápidos */
+    --cor-fundo: #f4f6f9;         /* Cinza claro de fundo super leve */
+    --cor-texto: #333333;         /* Texto principal */
+}
+
+body {
+    background-color: var(--cor-fundo);
+    color: var(--cor-texto);
+    line-height: 1.6;
+}
+
+/* ==========================================================================
+   2. CABEÇALHO E MENU
+   ========================================================================== */
+header {
+    background-color: var(--cor-primaria);
+    color: white;
+    padding: 20px 10px;
+    text-align: center;
+    border-bottom: 4px solid var(--cor-secundaria);
+}
+
+header h1 {
+    font-size: 2.5rem;
+    letter-spacing: 2px;
+    margin-bottom: 5px;
+}
+
+header p {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.menu-navegacao {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.menu-navegacao a {
+    color: white;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    transition: background 0.3s;
+}
+
+.menu-navegacao a.ativo, .menu-navegacao a:hover {
+    background-color: var(--cor-secundaria);
+}
+
+.btn-anuncio-menu {
+    border: 1px solid white;
+}
+
+/* ==========================================================================
+   3. BLOCO DE BUSCA (Foco total em Usabilidade Direta)
+   ========================================================================== */
+.busca-container {
+    background-color: white;
+    max-width: 800px;
+    margin: 25px auto;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    text-align: center;
+}
+
+.busca-container h2 {
+    font-size: 1.3rem;
+    color: var(--cor-primaria);
+    margin-bottom: 15px;
+}
+
+.busca-form {
+    display: flex;
+    gap: 10px;
+}
+
+.busca-form select {
+    flex: 1;
+    padding: 12px;
+    font-size: 1rem;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    background-color: #fff;
+}
+
+.busca-form select:focus {
+    border-color: var(--cor-secundaria);
+}
+
+.busca-form button {
+    background-color: var(--cor-secundaria);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.busca-form button:hover {
+    background-color: #006666;
+}
+
+/* ==========================================================================
+   4. ESTRUTURA PRINCIPAL (Listas limpas estilo PCI Concursos)
+   ========================================================================== */
+.conteudo-principal {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr; /* 2 colunas no computador */
+    gap: 25px;
+    padding: 0 15px;
+}
+
+.listagem-vagas h2 {
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    color: var(--cor-primaria);
+    border-left: 5px solid var(--cor-secundaria);
+    padding-left: 10px;
+}
+
+/* Cartão Base de Vaga */
+.vaga-item {
+    background: white;
+    border-radius: 6px;
+    padding: 20px;
+    margin-bottom: 15px;
+    border: 1px solid #e1e4e8;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.tag-universidade {
+    background-color: #e0eaf5;
+    color: var(--cor-primaria);
+    font-size: 0.75rem;
+    font-weight: bold;
+    padding: 3px 8px;
+    border-radius: 3px;
+    display: inline-block;
+    margin-bottom: 8px;
+}
+
+.vaga-item h3 {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+}
+
+.vaga-item p {
+    font-size: 0.95rem;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+/* Estilização dos Botões do WhatsApp */
+.btn-zap {
+    display: inline-block;
+    background-color: #25d366;
+    color: white;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    text-align: center;
+    transition: background 0.2s;
+}
+
+.btn-zap:hover {
+    background-color: #1ebd59;
+}
+
+/* REGRAS ALGORÍTMICAS VISUAIS (Monetização) */
+.destaque-premium {
+    border: 2px solid var(--cor-premium);
+    background-color: #fffdf3;
+}
+
+.badge-premium {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background-color: var(--cor-premium);
+    color: #5d4037;
+    font-size: 0.7rem;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.destaque-9dias {
+    border: 2px solid var(--cor-9dias);
+    background-color: #fffaf5;
+}
+
+.badge-9dias {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background-color: var(--cor-9dias);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+/* ==========================================================================
+   5. BARRA LATERAL (Patrocinadores Recorrentes)
+   ========================================================================== */
+.barra-patrocinadores h2 {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    color: var(--cor-primaria);
+}
+
+.card-patrocinador {
+    background: #fff;
+    border: 1px dashed var(--cor-secundaria);
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+.card-patrocinador h4 {
+    color: var(--cor-secundaria);
+    margin-bottom: 5px;
+}
+
+.card-patrocinador p {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+/* ==========================================================================
+   6. FORMULÁRIO DE CADASTRO
+   ========================================================================== */
+.formulario-anuncio-container {
+    background: white;
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.formulario-anuncio-container h2 {
+    color: var(--cor-primaria);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#form-cadastro-imovel label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+#form-cadastro-imovel input, 
+#form-cadastro-imovel select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.btn-enviar-anuncio {
+    width: 100%;
+    background-color: var(--cor-primaria);
+    color: white;
+    border: none;
+    padding: 14px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: 4px;
+    margin-top: 25px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-enviar-anuncio:hover {
+    background-color: #002244;
+}
+
+/* ==========================================================================
+   7. RODAPÉ
+   ========================================================================== */
+footer {
+    background-color: #222;
+    color: #888;
+    text-align: center;
+    padding: 20px;
+    font-size: 0.85rem;
+    margin-top: 5px;
+}
+
+/* ==========================================================================
+   8. RESPONSIVIDADE ADAPTATIVA (Dispositivos Móveis/Celulares)
+   ========================================================================== */
+@media (max-width: 768px) {
+    /* Transforma as colunas em blocos empilhados para caber perfeitamente na tela do celular */
+    .conteudo-principal {
+        grid-template-columns: 1fr;
+    }
+    
+    .busca-form {
+        flex-direction: column;
+    }
+    
+    header h1 {
+        font-size: 2rem;
+    }
+    
+    .busca-container, .formulario-anuncio-container {
+        margin: 15px;
+        padding: 15px;
+    }
+
+    .badge-premium, .badge-9dias {
+        position: static;
+        display: inline-block;
+        margin-top: 5px;
+        margin-bottom: 10px;
+    }
+}

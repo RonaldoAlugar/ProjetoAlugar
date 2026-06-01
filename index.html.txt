@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALUGAR - Moradia Universitária Autônoma</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <h1>ALUGAR</h1>
+            <p>Plataforma Autônoma de Moradia Universitária</p>
+        </div>
+        <nav class="menu-navegacao">
+            <a href="#buscar" class="ativo">Quero Alugar</a>
+            <a href="#anunciar" class="btn-anuncio-menu">Anunciar Imóvel</a>
+        </nav>
+    </header>
+
+    <!-- FORMULÁRIO DE BUSCA -->
+    <section id="buscar" class="busca-container">
+        <h2>Selecione a Universidade</h2>
+        <form class="busca-form">
+            <select name="universidade" id="select-uni" required>
+                <option value="">-- Escolha a instituição --</option>
+                <option value="unicamp">UNICAMP - Campinas / Limeira</option>
+                <option value="ufscar">UFSCar - São Carlos e campi</option>
+                <option value="ufba">UFBA - Salvador</option>
+                <option value="uesc">UESC - Ilhéus / Itabuna</option>
+                <option value="ufsba">UFSBA - Região Sul da BA</option>
+            </select>
+            <button type="submit">Filtrar Vagas</button>
+        </form>
+    </section>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="conteudo-principal">
+        <section class="listagem-vagas">
+            <h2>Imóveis Disponíveis</h2>
+            <div id="container-vagas-dinamicas"></div>
+        </section>
+
+        <aside class="barra-patrocinadores" id="bloco-patrocinadores">
+            <h2>Parceiros da Região</h2>
+            <div class="card-patrocinador">
+                <h4>Xerox & Cópias Universitária</h4>
+                <p>Mostre a carteirinha e ganhe 10% de desconto.</p>
+            </div>
+        </aside>
+    </main>
+
+    <!-- FORMULÁRIO DE CADASTRO -->
+    <section id="anunciar" class="formulario-anuncio-container">
+        <h2>Cadastrar Meu Imóvel</h2>
+        
+        <form id="form-cadastro-imovel">
+            <label for="nome-proprietario">Nome Completo:</label>
+            <input type="text" id="nome-proprietario" required>
+
+            <label for="uni-proxima">Universidade Próxima:</label>
+            <select id="uni-proxima" required>
+                <option value="UNICAMP">UNICAMP</option>
+                <option value="UFSCar">UFSCar</option>
+                <option value="UFBA">UFBA</option>
+                <option value="UESC">UESC</option>
+                <option value="UFSBA">UFSBA</option>
+            </select>
+
+            <label for="tipo-imovel">Tipo de Vaga:</label>
+            <select id="tipo-imovel" required>
+                <option value="Quarto em República">Quarto em República</option>
+                <option value="Kitnet Privada">Kitnet Privada</option>
+                <option value="Apartamento">Apartamento Compartilhado</option>
+            </select>
+
+            <label for="preco-imovel">Preço Mensal (R$):</label>
+            <input type="number" id="preco-imovel" required>
+
+            <label for="contato-proprietario">WhatsApp de Contato:</label>
+            <input type="tel" id="contato-proprietario" placeholder="(00) 99999-9999" required>
+
+            <label for="plano-anuncio" style="color: #d32f2f; font-weight: bold;">Escolha o Plano do Anúncio:</label>
+            <select id="plano-anuncio" required style="padding: 8px;">
+                <option value="gratis">Plano Básico - R$ 0,00 (Posições inferiores)</option>
+                <option value="9dias">Anúncio Rápido (9 dias) - R$ 4,90</option>
+                <option value="premium">Assinatura Premium (30 dias) - R$ 9,90 (Destaque no Topo + Desconto de Lançamento)</option>
+            </select>
+
+            <button type="submit" class="btn-enviar-anuncio">Finalizar Cadastro</button>
+        </form>
+    </section>
+
+    <!-- MODAL DE PAGAMENTO PIX -->
+    <div id="modal-pagamento" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center;">
+        <div style="background: white; padding: 25px; border-radius: 10px; max-width: 450px; width: 90%; text-align: center; font-family: Arial, sans-serif;">
+            <h3 style="color: #00a650; margin-top: 0;">⚡ Quase lá! Ativação do Anúncio</h3>
+            
+            <div id="alerta-desconto-contador" style="background: #fff8e1; border: 1px solid #ffe082; padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 14px; color: #b78103;"></div>
+            
+            <p>Efetue o pagamento PIX. O saldo cai direto no Mercado Pago do administrador e seu anúncio sobe na hora de forma autônoma.</p>
+            
+            <p style="font-size: 18px; font-weight: bold;">Valor: <span id="modal-valor-pagar" style="color: #00a650;">R$ 9,90</span></p>
+            
+            <label style="font-weight: bold; display: block; margin-bottom: 5px; text-align: left; font-size: 13px;">Código PIX Copia e Cola:</label>
+            <textarea id="texto-pix-copia" readonly style="width: 100%; height: 70px; resize: none; padding: 5px; border: 1px solid #ccc; border-radius: 4px; font-family: monospace; font-size: 11px; margin-bottom: 10px;"></textarea>
+            
+            <button id="btn-copiar-pix" style="background: #0070f3; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; width: 100%; font-weight: bold; margin-bottom: 15px;">📋 Copiar Código PIX</button>
+            
+            <hr style="border: 0; border-top: 1px solid #eee; margin-bottom: 15px;">
+            
+            <button id="btn-confirmar-pago" style="background: #00a650; color: white; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; width: 100%; font-weight: bold; font-size: 15px;">✅ Já paguei no meu aplicativo do banco</button>
+            
+            <button id="btn-cancelar-modal" style="background: transparent; color: #666; border: none; margin-top: 10px; cursor: pointer; font-size: 13px;">Cancelar e voltar</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 - ALUGAR - Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

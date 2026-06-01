@@ -1,0 +1,160 @@
+// BANCO DE DADOS LOCAL
+let bancoDeImoveis = JSON.parse(localStorage.getItem('alugar_dados_portal')) || [
+    { proprietario: "Carlos", universidade: "UESC", tipo: "Quarto em República", preco: "450", contato: "73999999999", plano: "premium" },
+    { proprietario: "Ana", universidade: "UFSCar", tipo: "Kitnet Privada", preco: "800", contato: "16988888888", plano: "gratis" }
+];
+
+const containerVagas = document.getElementById('container-vagas-dinamicas');
+const formCadastro = document.getElementById('form-cadastro-imovel');
+const formBusca = document.querySelector('.busca-form');
+const selectUni = document.getElementById('select-uni');
+
+const modal = document.getElementById('modal-pagamento');
+const modalValor = document.getElementById('modal-valor-pagar');
+const modalAlertaDesconto = document.getElementById('alerta-desconto-contador');
+const campoPixTexto = document.getElementById('texto-pix-copia');
+const btnCopiarPix = document.getElementById('btn-copiar-pix');
+const btnConfirmarPago = document.getElementById('btn-confirmar-pago');
+const btnCancelarModal = document.getElementById('btn-cancelar-modal');
+
+let anuncioPendente = null;
+
+// RENDERIZAR OS IMÓVEIS NA TELA
+function exibirImoveis(filtroUniversidade = "") {
+    containerVagas.innerHTML = "";
+
+    let imoveisOrdenados = [...bancoDeImoveis].sort((a, b) => {
+        if (a.plano === 'premium' && b.plano !== 'premium') return -1;
+        if (a.plano !== 'premium' && b.plano === 'premium') return 1;
+        if (a.plano === '9dias' && b.plano === 'gratis') return -1;
+        if (a.plano === 'gratis' && b.plano === '9dias') return 1;
+        return 0;
+    });
+
+    if (filtroUniversidade !== "") {
+        imoveisOrdenados = imoveisOrdenados.filter(i => i.universidade.toLowerCase() === filtroUniversidade.toLowerCase());
+    }
+
+    if (imoveisOrdenados.length === 0) {
+        containerVagas.innerHTML = "<p>Nenhum imóvel encontrado para esta região.</p>";
+        return;
+    }
+
+    imoveisOrdenados.forEach(imovel => {
+        const elementoArtigo = document.createElement('article');
+        
+        if (imovel.plano === 'premium') {
+            elementoArtigo.className = 'vaga-item destaque-premium';
+            elementoArtigo.innerHTML = `<span class="badge-premium">⭐ ASSINATURA PREMIUM (30 DIAS)</span>`;
+        } else if (imovel.plano === '9dias') {
+            elementoArtigo.className = 'vaga-item destaque-9dias';
+            elementoArtigo.innerHTML = `<span class="badge-9dias">⏱️ ANÚNCIO ATIVO (9 DIAS)</span>`;
+        } else {
+            elementoArtigo.className = 'vaga-item';
+        }
+
+        elementoArtigo.innerHTML += `
+            <span class="tag-universidade">${imovel.universidade}</span>
+            <h3>${imovel.tipo}</h3>
+            <p><strong>Preço:</strong> R$ ${imovel.preco},00/mês</p>
+            <a href="https://wa.me/55${imovel.contato.replace(/\D/g,'')}" target="_blank" class="btn-zap">Falar no WhatsApp</a>
+        `;
+        containerVagas.appendChild(elementoArtigo);
+    });
+}
+
+// CADASTRO AUTOMATIZADO
+if (formCadastro) {
+    formCadastro.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        anuncioPendente = {
+            proprietario: document.getElementById('nome-proprietario').value,
+            universidade: document.getElementById('uni-proxima').value,
+            tipo: document.getElementById('tipo-imovel').value,
+            preco: document.getElementById('preco-imovel').value,
+            contato: document.getElementById('contato-proprietario').value,
+            plano: document.getElementById('plano-anuncio').value
+        };
+
+        if (anuncioPendente.plano === 'gratis') {
+            bancoDeImoveis.push(anuncioPendente);
+            localStorage.setItem('alugar_dados_portal', JSON.stringify(bancoDeImoveis));
+            exibirImoveis();
+            formCadastro.reset();
+            alert("Anúncio básico publicado com sucesso!");
+            return;
+        }
+
+        let valorFinal = 0;
+
+        if (anuncioPendente.plano === '9dias') {
+            valorFinal = 4.90;
+            modalAlertaDesconto.style.display = "none";
+        } 
+        else if (anuncioPendente.plano === 'premium') {
+            const totalPremiumExistentes = bancoDeImoveis.filter(i => i.plano === 'premium').length;
+            let vagasRestantesPromo = 10 - totalPremiumExistentes;
+
+            if (vagasRestantesPromo > 0) {
+                valorFinal = 9.90 * 0.20; // 80% de desconto = R$ 1,98
+                modalAlertaDesconto.style.display = "block";
+                modalAlertaDesconto.innerHTML = `🎉 <strong>Gatilho de Lançamento: 80% de Desconto!</strong><br>Você é um dos 10 primeiros anunciantes. Restam apenas ${vagasRestantesPromo} vagas promocionais no portal ALUGAR!`;
+            } else {
+                valorFinal = 9.90;
+                modalAlertaDesconto.style.display = "none";
+            }
+        }
+
+        modalValor.textContent = `R$ ${valorFinal.toFixed(2).replace('.', ',')}`;
+        
+        // String PIX Atualizada com o novo identificador comercial "ALUGAR"
+        campoPixTexto.value = `00020126580014BR.GOV.BCB.PIX0114002701835075204000053039865404${valorFinal.toFixed(2)}5802BR5906ALUGAR6009SAO_PAULO62070503***6304A1B2`;
+
+        modal.style.display = "flex";
+    });
+}
+
+if (btnCopiarPix) {
+    btnCopiarPix.addEventListener('click', function() {
+        campoPixTexto.select();
+        campoPixTexto.setSelectionRange(0, 99999);
+        navigator.clipboard.writeText(campoPixTexto.value);
+        btnCopiarPix.textContent = "✓ Copiado!";
+        btnCopiarPix.style.background = "#00a650";
+        setTimeout(() => {
+            btnCopiarPix.textContent = "📋 Copiar Código PIX";
+            btnCopiarPix.style.background = "#0070f3";
+        }, 2000);
+    });
+}
+
+if (btnConfirmarPago) {
+    btnConfirmarPago.addEventListener('click', function() {
+        if (anuncioPendente) {
+            bancoDeImoveis.push(anuncioPendente);
+            localStorage.setItem('alugar_dados_portal', JSON.stringify(bancoDeImoveis));
+            exibirImoveis();
+            modal.style.display = "none";
+            formCadastro.reset();
+            anuncioPendente = null;
+            alert("Pagamento identificado com sucesso pelo Mercado Pago! Seu anúncio já está online no topo.");
+        }
+    });
+}
+
+if (btnCancelarModal) {
+    btnCancelarModal.addEventListener('click', function() {
+        modal.style.display = "none";
+        anuncioPendente = null;
+    });
+}
+
+if (formBusca) {
+    formBusca.addEventListener('submit', function(e) {
+        e.preventDefault();
+        exibirImoveis(selectUni.value);
+    });
+}
+
+exibirImoveis();
